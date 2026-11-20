@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0b0b0b">
+<title>開運解鎖一番賞｜抽獎</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+TC:wght@500;700;900&display=swap">
+<style>
+  :root{--y:#FFE600; --k:#0b0b0b; --w:#fff; --g:#9a9a9a; --err:#ff6b6b}
+  *{box-sizing:border-box}
+  html,body{margin:0; height:100%}
+  body{
+    color:var(--w); font-family:'Noto Sans TC',system-ui,-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+    background-color:#141414; background-image:repeating-conic-gradient(#1f1f1f 0 25%, #141414 0 50%); background-size:96px 96px;
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:16px 20px 32px}
+  button,input{font:inherit}
+
+  /* TOP */
+  .top{display:flex; align-items:center; justify-content:space-between; gap:16px; background:var(--k); padding:14px 20px; border-bottom:5px solid var(--y)}
+  .brand{display:flex; align-items:baseline; gap:14px; min-width:0}
+  .brand .en{font-family:Anton,sans-serif; color:var(--y); font-size:30px; line-height:1; white-space:nowrap}
+  .brand .zh{font-weight:900; font-size:26px; letter-spacing:2px; white-space:nowrap}
+
+  /* BOARD */
+  .board{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:10px; margin:16px 0 18px}
+  .pz{background:var(--k); border:2px solid #333; border-radius:12px; padding:10px 10px 12px; text-align:center}
+  .pz .l{font-family:Anton,sans-serif; font-size:40px; line-height:1; color:var(--y)}
+  .pz .l small{font-family:'Noto Sans TC',sans-serif; font-weight:900; font-size:18px; margin-left:2px}
+  .pz .n{font-family:Anton,sans-serif; font-size:22px; margin-top:4px}
+  .pz .n span{color:var(--g); font-size:16px}
+  .pz .cells{display:flex; flex-wrap:wrap; justify-content:center; gap:3px; margin-top:8px}
+  .pz .cells i{width:9px; height:9px; border-radius:2px; background:var(--y)}
+  .pz .cells i.x{background:#333}
+  .pz.out{opacity:.45}
+  .pz.out .l{color:#777}
+  .pz.big{border-color:var(--y)}
+
+  /* PANELS */
+  .panel{background:var(--w); color:var(--k); border-radius:16px; padding:28px 24px; text-align:center; max-width:560px; margin:24px auto}
+  .panel h2{margin:0 0 6px; font-size:28px; font-weight:900}
+  .panel p{margin:0 0 18px; color:#444; font-size:16px; line-height:1.6}
+  .field{display:flex; gap:10px; justify-content:center}
+  .field input{width:100%; max-width:280px; height:76px; border:3px solid var(--k); border-radius:12px; text-align:center; font-family:Anton,sans-serif; font-size:44px; letter-spacing:4px; color:var(--k); background:#fffbd1; -webkit-user-select:text; user-select:text}
+  .field input:focus{outline:4px solid #1565c0; outline-offset:2px}
+  .btn{appearance:none; border:0; cursor:pointer; font-weight:900; font-size:22px; min-height:76px; padding:0 30px; border-radius:12px; background:var(--k); color:var(--y)}
+  .btn:disabled{opacity:.5; cursor:wait}
+  .btn:focus-visible{outline:4px solid #1565c0; outline-offset:2px}
+  .btn.y{background:var(--y); color:var(--k); clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%); padding-right:44px}
+  .msg{min-height:28px; margin-top:14px; font-weight:900; font-size:18px; color:#c62828}
+  .msg.ok{color:#2e7d32}
+
+  /* GRID */
+  .pick-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:6px 0 14px}
+  .pick-head .who{font-family:Anton,sans-serif; font-size:40px; color:var(--y); line-height:1}
+  .pick-head .tip{font-size:24px; font-weight:900}
+  .pick-head .cancel{appearance:none; border:1px solid #555; background:transparent; color:#ccc; border-radius:10px; padding:10px 16px; font-size:16px; cursor:pointer; min-height:48px}
+  .grid{display:grid; grid-template-columns:repeat(10,minmax(0,1fr)); gap:8px; perspective:900px}
+  .tk{position:relative; aspect-ratio:4/3; border:0; padding:0; background:none; cursor:pointer; min-height:44px}
+  .tk .in{position:absolute; inset:0; transition:transform .7s cubic-bezier(.2,.8,.2,1); transform-style:preserve-3d}
+  .tk .f,.tk .b{position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:6px; display:grid; place-items:center}
+  .tk .f{background:var(--y); color:var(--k); font-family:Anton,sans-serif; font-size:clamp(14px,2.4vw,24px);
+    background-image:repeating-linear-gradient(45deg, rgba(0,0,0,.08) 0 6px, transparent 6px 12px);
+    clip-path:polygon(0 0,100% 0,100% 40%,88% 50%,100% 60%,100% 100%,0 100%,0 60%,12% 50%,0 40%)}
+  .tk .b{background:var(--w); color:var(--k); transform:rotateY(180deg); font-family:Anton,sans-serif; font-size:clamp(18px,3.4vw,34px)}
+  .tk:hover .in{transform:translateY(-4px)}
+  .tk:focus-visible{outline:3px solid #fff; outline-offset:2px; border-radius:6px}
+  .tk.flip .in{transform:rotateY(180deg) scale(1.15)}
+  .tk.dim{opacity:.25; pointer-events:none}
+  .grid.busy .tk{pointer-events:none}
+
+  /* RESULT */
+  .result{position:fixed; inset:0; background:rgba(0,0,0,.82); display:grid; place-items:center; z-index:10; padding:20px}
+  .card{background:var(--w); color:var(--k); border-radius:20px; padding:30px 40px 34px; text-align:center; width:min(520px,100%); animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+  .card .lbl{font-weight:900; font-size:20px; color:#555; letter-spacing:3px}
+  .card .big{font-family:Anton,sans-serif; font-size:180px; line-height:1; margin:8px 0 0}
+  .card .big small{font-family:'Noto Sans TC',sans-serif; font-weight:900; font-size:72px}
+  .card .sub{font-size:20px; font-weight:900; margin:10px 0 22px}
+  .card.win{background:var(--y); box-shadow:0 0 0 10px var(--k), 0 0 80px 10px rgba(255,230,0,.6)}
+  .card.win .lbl{color:var(--k)}
+  @keyframes pop{from{transform:scale(.4); opacity:0} to{transform:scale(1); opacity:1}}
+  .confetti{position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:11}
+  .confetti i{position:absolute; top:-20px; width:12px; height:18px; animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+  .soldout{font-family:Anton,sans-serif; font-size:64px; color:var(--y); text-align:center; margin:40px 0 0}
+  @media (max-width:760px){
+    .board{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+    .brand .zh{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){ .tk .in{transition:none} .card{animation:none} .confetti{display:none} }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="en">UNLOCK YOUR LUCK</span><span class="zh">開運解鎖一番賞</span></div>
+</header>
+<div class="wrap">
+  <section class="board" id="board" aria-label="剩餘獎項"></section>
+  <main id="app" aria-live="polite"></main>
+</div>
+<div id="layer"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ===================== 設定區 ===================== */
+  var CONFIG = {
+    // 和問卷頁同一個 Apps Script 網址（結尾 /exec）
+    SCRIPT_URL: 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE',
+    // 獎項名稱（選填，例如 A: 'Yale 電子鎖'；留空就只顯示 A賞）
+    NAMES: { A: '', B: '', C: '', D: '', E: '', F: '' }
+  };
+  /* ================================================= */
+
+  var ORDER = ['A', 'B', 'C', 'D', 'E', 'F'];
+  var BIG = { A: 1, B: 1 };
+
+  var app = document.getElementById('app');
+  var board = document.getElementById('board');
+  var layer = document.getElementById('layer');
+  var pool = null;
+  var current = null; // 目前要抽的編號
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function pad(n) { return String(n).padStart(3, '0'); }
+  function prizeName(k) { return CONFIG.NAMES[k] ? '｜' + CONFIG.NAMES[k] : ''; }
+
+  function api(body) {
+    if (!/^https:\/\//.test(CONFIG.SCRIPT_URL)) return Promise.reject(new Error('nourl'));
+    return fetch(CONFIG.SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body)
+    }).then(function (r) { return r.json(); });
+  }
+
+  /* ---------- 剩餘看板 ---------- */
+  function renderBoard() {
+    if (!pool) { board.innerHTML = ''; return; }
+    board.innerHTML = ORDER.map(function (k) {
+      var p = pool[k], cells = '';
+      for (var i = 0; i < p.total; i++) cells += '<i class="' + (i < p.total - p.left ? 'x' : '') + '"></i>';
+      return '<div class="pz' + (p.left === 0 ? ' out' : '') + (BIG[k] && p.left ? ' big' : '') + '">' +
+        '<div class="l">' + k + '<small>賞</small></div>' +
+        '<div class="n">' + p.left + '<span> / ' + p.total + '</span></div>' +
+        '<div class="cells" aria-hidden="true">' + cells + '</div></div>';
+    }).join('');
+  }
+  function totalLeft() { return pool ? ORDER.reduce(function (s, k) { return s + pool[k].left; }, 0) : 0; }
+
+  /* ---------- 2. 輸入抽獎編號 ---------- */
+  function showEntry(msg, ok) {
+    current = null; renderBoard();
+    if (totalLeft() === 0) { app.innerHTML = '<p class="soldout">ALL SOLD OUT・全部抽完囉！</p>'; return; }
+    app.innerHTML =
+      '<form class="panel" id="entry"><h2>輸入抽獎編號</h2><p>請民眾出示問卷完成畫面上的「No.」數字</p>' +
+      '<div class="field"><input id="num" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="087" autocomplete="off" aria-label="抽獎編號"></div>' +
+      '<div style="margin-top:16px"><button class="btn y" type="submit">確認，開始抽籤</button></div>' +
+      '<div class="msg' + (ok ? ' ok' : '') + '" role="alert">' + (msg || '') + '</div></form>';
+    var f = document.getElementById('entry'), inp = document.getElementById('num');
+    inp.focus();
+    inp.addEventListener('input', function () { inp.value = inp.value.replace(/\D/g, ''); });
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var n = Number(inp.value);
+      if (!n) return;
+      var btn = f.querySelector('button'); btn.disabled = true; btn.textContent = '確認中…';
+      api({ action: 'check', serial: n }).then(function (d) {
+        if (d.pool) pool = d.pool;
+        if (d.ok) { current = n; return showGrid(); }
+        if (d.error === 'already') return showEntry('No.' + pad(n) + ' 已經抽過了（抽中 ' + esc(d.prize) + ' 賞）');
+        if (d.error === 'notfound') return showEntry('查無 No.' + pad(n) + '，請確認民眾已送出問卷');
+        showEntry('發生錯誤，請再試一次');
+      }).catch(function () { showEntry('連線失敗，請檢查網路後再試一次'); });
+    });
+  }
+
+  /* ---------- 3. 選一張籤 ---------- */
+  function showGrid() {
+    renderBoard();
+    var n = totalLeft(), html = '';
+    for (var i = 0; i < n; i++) {
+      html += '<button type="button" class="tk" data-i="' + i + '" aria-label="第 ' + (i + 1) + ' 張籤"><span class="in"><span class="f">LUCK</span><span class="b"></span></span></button>';
+    }
+    app.innerHTML =
+      '<div class="pick-head"><div><div class="who">No.' + pad(current) + '</div></div>' +
+      '<div class="tip">請選一張籤！</div>' +
+      '<button type="button" class="cancel" id="cancel">取消</button></div>' +
+      '<div class="grid" id="grid">' + html + '</div>';
+    document.getElementById('cancel').onclick = function () { showEntry(); };
+    var grid = document.getElementById('grid');
+    grid.addEventListener('click', function (e) {
+      var tk = e.target.closest('.tk');
+      if (!tk || grid.classList.contains('busy')) return;
+      grid.classList.add('busy');
+      Array.prototype.forEach.call(grid.children, function (x) { if (x !== tk) x.classList.add('dim'); });
+      tk.querySelector('.f').textContent = '…';
+      api({ action: 'draw', serial: current }).then(function (d) {
+        if (d.pool) pool = d.pool;
+        if (d.ok) return reveal(tk, d.prize);
+        if (d.error === 'already') return reveal(tk, d.prize);
+        if (d.error === 'soldout') return showEntry('籤已全部抽完');
+        showEntry('抽獎失敗，請重新輸入編號再試一次');
+      }).catch(function () {
+        // 可能已經抽到但沒收到回覆：重新查詢就會顯示結果
+        showEntry('連線中斷，請重新輸入 No.' + pad(current) + ' 查詢結果');
+      });
+    });
+  }
+
+  /* ---------- 4. 揭曉 ---------- */
+  function reveal(tk, k) {
+    tk.querySelector('.b').textContent = k + '賞';
+    tk.classList.add('flip');
+    renderBoard();
+    setTimeout(function () {
+      var win = !!BIG[k];
+      layer.innerHTML =
+        '<div class="result" role="dialog" aria-modal="true" aria-label="抽獎結果">' +
+          '<div class="card' + (win ? ' win' : '') + '">' +
+            '<div class="lbl">No.' + pad(current) + '　恭喜抽中</div>' +
+            '<div class="big">' + esc(k) + '<small>賞</small></div>' +
+            '<div class="sub">' + (win ? '大獎！開運成功！' : '開運成功！') + esc(prizeName(k)) + '</div>' +
+            '<button type="button" class="btn" id="next">下一位</button>' +
+          '</div></div>';
+      if (win) confetti();
+      var next = document.getElementById('next');
+      next.focus();
+      next.onclick = function () { layer.innerHTML = ''; showEntry('上一位 No.' + pad(current) + ' 抽中 ' + k + ' 賞', true); };
+    }, 800);
+  }
+
+  function confetti() {
+    var box = document.createElement('div'); box.className = 'confetti';
+    var colors = ['#FFE600', '#ffffff', '#0b0b0b', '#ffb300'];
+    for (var i = 0; i < 90; i++) {
+      var c = document.createElement('i');
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[i % colors.length];
+      c.style.animationDuration = (2 + Math.random() * 2.5) + 's';
+      c.style.animationDelay = Math.random() * .6 + 's';
+      box.appendChild(c);
+    }
+    document.body.appendChild(box);
+    setTimeout(function () { box.remove(); }, 5500);
+  }
+
+  // 開啟時：載入籤池後直接進入輸入編號
+  function start() {
+    app.innerHTML = '<p style="text-align:center;margin-top:40px">載入中…</p>';
+    api({ action: 'status' }).then(function (d) {
+      if (!d.ok) throw new Error('fail');
+      pool = d.pool; showEntry();
+    }).catch(function (err) {
+      app.innerHTML = '<div class="panel"><h2>無法連線</h2><p>' +
+        (err.message === 'nourl' ? '尚未設定 SCRIPT_URL' : '請檢查網路後重新整理頁面') +
+        '</p><button type="button" class="btn" id="retry">重新載入</button></div>';
+      document.getElementById('retry').onclick = start;
+    });
+  }
+  start();
+})();
+</script>
+</body>
+</html>
